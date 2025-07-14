@@ -25,10 +25,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //클라이언트 요청에서 username, password 추출 (ObtainUsername, ObtainPassword 메소드 사용)
         String username = obtainUsername(request);
+        System.out.println("obtainUserName : " + username);
         String password = obtainPassword(request);
 
         //인증 진행 -> authenticationManager 한테 username, password DTO(usernamePasswordAuthenticationToken) 로 던져주고, 인증 받음(db 조회)
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+        System.out.println("authToken : " + authToken);
         return authenticationManager.authenticate(authToken); // 검증 진행 (db 에서 회원정보 -> user details에서 회원 정보 받고, 검증 진행)
 
     }
@@ -36,8 +38,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authentication){
 
+        System.out.println("successful authentication");
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed){}
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed){
+        System.out.println("fail authentication");
+    }
 }
