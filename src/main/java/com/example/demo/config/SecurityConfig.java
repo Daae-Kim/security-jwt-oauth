@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 
+import com.example.demo.jwt.JWTFilter;
 import com.example.demo.jwt.JWTUtil;
 import com.example.demo.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -56,9 +57,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/admin").hasAuthority("ADMIN_ROLE")
                         .anyRequest().authenticated());
         //커스텀 필터 등록
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
         //세션 stateless 설정
